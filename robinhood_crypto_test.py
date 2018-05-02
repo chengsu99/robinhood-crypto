@@ -28,12 +28,26 @@ if __name__ == '__main__':
     order_id = market_order_info['id']
     print('market order {} status: {}'.format(order_id, r.order_status(order_id)))
 
-    # Limit orders
+    # Limit orders BTC
     limit_order_info = r.trade(
         'BTCUSD',
         # price=1.00,
         price=round(float(quote_info['mark_price']) * 0.8, 2),
         quantity="0.00005",
+        side="buy",
+        time_in_force="gtc",
+        type="limit"
+    )
+    order_id = limit_order_info['id']
+    print('limit order {} status: {}'.format(order_id, r.order_status(order_id)))
+    print('canceling limit order {}: {}'.format(order_id, r.order_cancel(order_id)))
+
+    # Limit orders ETH
+    limit_order_info = r.trade(
+        'ETHUSD',
+        # price=1.00,
+        price=round(float(quote_info['mark_price']) * 0.95, 2),
+        quantity="0.001",
         side="buy",
         time_in_force="gtc",
         type="limit"
