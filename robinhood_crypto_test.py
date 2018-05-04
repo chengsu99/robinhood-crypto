@@ -1,5 +1,5 @@
 import getpass
-from robinhood_crypto_api import Robinhood
+from RHCRYPTO import Robinhood
 
 
 def read_credentials():
