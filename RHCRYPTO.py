@@ -46,6 +46,7 @@ class Robinhood:
         'order_status': 'https://nummus.robinhood.com/orders/{}',  # Order id
         'order_cancel': 'https://nummus.robinhood.com/orders/{}/cancel/',
         'accounts': "https://nummus.robinhood.com/accounts",
+        'holdings': "https://nummus.robinhood.com/holdings",
     }
 
     def __init__(self, username, password):
@@ -108,7 +109,7 @@ class Robinhood:
 
     # Return: dict
     # {'ask_price': '8836.3300', 'bid_price': '8801.0500', 'mark_price': '8818.6900', 'high_price': '9064.6400', 'low_price': '8779.9599', 'open_price': '8847.2400', 'symbol': 'BTCUSD', 'id': '3d961844-d360-45fc-989b-f6fca761d511', 'volume': '380373.1898'}
-    def quotes(self, pair='BTCUSD'):
+    def quotes(self, pair):
         symbol = Robinhood.PAIRS[pair]
         assert symbol, 'unknown pair {}'.format(pair)
         url = Robinhood.ENDPOINTS['quotes'].format(symbol)
@@ -137,6 +138,16 @@ class Robinhood:
             LOG.error('account cannot be retrieved')
             raise AccountNotFoundException()
         return None
+
+    def holdings(self):
+        url = Robinhood.ENDPOINTS['holdings']
+        try:
+            data = self.session_request(url, method='get')
+        except Exception as e:
+            raise e
+        if 'results' in data:
+            return [x for x in data['results']]
+        return []
 
     # return:
     # dict in format
